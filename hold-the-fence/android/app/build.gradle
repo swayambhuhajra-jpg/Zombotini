@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+}
+
+// ---------------------------------------------------------------------------
+// The game lives at the repo root (index.html, css/, js/, assets/).
+// Before every build it is copied into the APK's assets as "www/".
+// Edit the web files only; never edit anything under build/.
+// ---------------------------------------------------------------------------
+def webOut = layout.buildDirectory.dir("generated/web").get().asFile
+tasks.register('copyWeb', Copy) {
+    from(rootProject.file('..')) {
+        include 'index.html', 'css/**', 'js/**', 'assets/**'
+    }
+    into new File(webOut, 'www')
+}
+preBuild.dependsOn 'copyWeb'
+
+// Release signing is optional: it switches on only when these environment
+// variables are set (the GitHub workflow sets them from repository secrets).
+def ksPath = System.getenv('KEYSTORE_PATH')
+
+android {
+    namespace 'com.xcubelabs.holdthefence'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.xcubelabs.holdthefence"
+        minSdk 24
+        targetSdk 34
+        versionCode 5
+        versionName "0.5.0"   // keep in step with CHANGELOG.md
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs += [webOut]
+        }
+    }
+
+    signingConfigs {
+        if (ksPath) {
+            release {
+                storeFile file(ksPath)
+                storePassword System.getenv('KEYSTORE_PASSWORD')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (ksPath) signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

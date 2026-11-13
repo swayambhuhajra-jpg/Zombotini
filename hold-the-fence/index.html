@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#12130E">
+<title>Hold the Fence</title>
+<link rel="icon" href="assets/sprites/boy_portrait.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="frame">
+    <canvas id="cv"></canvas>
+    <div class="hud" id="hud" hidden>
+      <div class="chip">Wave <b id="hWave">1</b></div>
+      <div class="bars">
+        <div class="bar" id="hpHouse"><span>Home</span><div class="track"><div class="fill"></div></div><span>100</span></div>
+        <div class="bar" id="hpBoy"><span>You</span><div class="track"><div class="fill"></div></div><span>100</span></div>
+      </div>
+      <div class="btns">
+        <button class="icon" id="bMute" aria-label="Toggle sound">♪</button>
+        <button class="icon" id="bPause" aria-label="Pause">II</button>
+      </div>
+    </div>
+    <div id="banner"></div>
+
+    <div class="overlay" id="oStart" hidden>
+      <img id="hero" alt="" style="height:120px;width:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))">
+      <h1 class="title">Hold the<em>Fence</em></h1>
+      <p class="sub">The dead are coming for your house. Hold them off with your axe.</p>
+      <ul class="rules">
+        <li><i>1</i><span>Drag anywhere to walk. Arrow keys or WASD on desktop.</span></li>
+        <li><i>2</i><span>Your axe swings by itself at any zombie in reach.</span></li>
+        <li><i>3</i><span>Zombies go for the house, and for you if you get close. Keep them off it.</span></li>
+      </ul>
+      <button class="btn" id="bStart">Defend</button>
+      <p class="stat" id="best"></p>
+    </div>
+
+    <div class="overlay" id="oUp" hidden>
+      <p class="stat" style="letter-spacing:.2em;text-transform:uppercase;color:var(--ember)">Wave <span id="upWave"></span> survived</p>
+      <h2 class="h2">Scavenge</h2>
+      <p class="sub">Pick one upgrade and catch your breath.</p>
+      <div class="cards" id="cards"></div>
+    </div>
+
+    <div class="overlay" id="oPause" hidden>
+      <h2 class="h2">Paused</h2>
+      <button class="btn" id="bResume">Resume</button>
+      <button class="btn ghost" id="bQuit">Restart</button>
+    </div>
+
+    <div class="overlay" id="oOver" hidden>
+      <h2 class="h2" id="overTitle">Overrun</h2>
+      <p class="stat" id="overWhy"></p>
+      <p class="stat">Waves survived <b id="oWave">0</b> &nbsp;·&nbsp; Zombies dropped <b id="oKills">0</b></p>
+      <p class="stat" id="oBest"></p>
+      <button class="btn" id="bAgain">Try again</button>
+    </div>
+    <div id="loading">Loading…</div>
+  </div>
+</div>
+<script src="js/game.js"></script>
+</body>
+</html>

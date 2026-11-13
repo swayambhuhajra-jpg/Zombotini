@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.HoldTheFence" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">#12130E</item>
+        <item name="android:statusBarColor">#12130E</item>
+        <item name="android:navigationBarColor">#12130E</item>
+    </style>
+</resources>

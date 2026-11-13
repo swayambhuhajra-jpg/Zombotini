@@ -1,0 +1,8 @@
+ID,Name,Card Text,Stat Affected,Base Value,Change Per Level,Max Levels,Value at Max Level,Notes,Approve (Y/N),Your Value / Comments
+rate,Quick Swing,Swing the axe 18% faster.,Time between axe swings (seconds),0.60 s,x0.82 (18% faster),4,0.27 s,Swing animation length also shortens (capped at 0.42 s),,
+dmg,Sharpened Edge,+1 axe damage.,Axe damage per hit,3,+1,No cap,No cap,Zombie HP is 3 + floor(0.9 x wave) so wave 1 zombies die in one hit,,
+arc,Wide Arc,Swings cover a wider angle.,Swing cone angle,120° (2.1 rad),+~52° (0.9 rad),3,~275° (4.8 rad),Hard cap 360°,,
+kb,Heavy Head,Hits knock zombies back further.,Knockback distance (px),10 px,+8 px,3,34 px,,,
+reach,Long Handle,+15% axe reach.,Axe reach (px from boy to zombie),50 px,x1.15,3,~76 px,Zombie body radius (14 px) is added on top,,
+boards,Board Up,Restore 40% of the house.,House HP (instant heal),House max 500 HP,+200 HP (40% of max),No cap,—,Repeatable; cannot exceed max HP,,
+shoes,Sneakers,Move 15% faster.,Boy move speed (px/s),150 px/s,x1.15,3,~228 px/s,Movement is still slowed to 55% mid-swing,,
