@@ -1,0 +1,66 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']          # pushing a tag like v0.5.0 also publishes a GitHub Release
+  workflow_dispatch:       # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Read app version
+        id: ver
+        run: echo "name=$(grep -oP 'versionName "\K[^"]+' android/app/build.gradle)" >> "$GITHUB_OUTPUT"
+
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          mkdir -p ../out
+          cp app/build/outputs/apk/debug/app-debug.apk ../out/hold-the-fence-v${{ steps.ver.outputs.name }}-debug.apk
+
+      # Optional signed release APK. Add these repository secrets to enable it:
+      # KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
+      - name: Build signed release APK
+        if: env.KEYSTORE_BASE64 != ''
+        working-directory: android
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > "$KEYSTORE_PATH"
+          ./gradlew assembleRelease --no-daemon
+          cp app/build/outputs/apk/release/app-release.apk ../out/hold-the-fence-v${{ steps.ver.outputs.name }}-release.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: hold-the-fence-v${{ steps.ver.outputs.name }}
+          path: out/*.apk
+
+      - name: Attach APK to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.apk
